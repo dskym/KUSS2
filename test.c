@@ -21,19 +21,19 @@
 
 static unsigned int hook_pre_route_func(void *priv, struct sk_buff *skb, const struct nf_hook_state *state)
 {
-	struct iphdr *ih = ip_hdr(skb);
+    struct iphdr *ih = ip_hdr(skb);
     struct tcphdr *th = tcp_hdr(skb);
      
     unsigned char protocol = ih->protocol;
     unsigned int src_addr = ih->saddr;
-	unsigned int dst_addr = ih->daddr;
+    unsigned int dst_addr = ih->daddr;
    
-	unsigned short src_port = ntohs(th->source);
-	unsigned short dst_port = ntohs(th->dest);
+    unsigned short src_port = ntohs(th->source);
+    unsigned short dst_port = ntohs(th->dest);
 
     int datalen;
     
-	printk(KERN_DEBUG "PRE_ROUTING : (%u,%u,%u,%u.%u.%u.%u,%u.%u.%u.%u)\n", protocol, src_port, dst_port, NIPQUAD(src_addr), NIPQUAD(dst_addr));
+    printk(KERN_DEBUG "PRE_ROUTING : (%u,%u,%u,%u.%u.%u.%u,%u.%u.%u.%u)\n", protocol, src_port, dst_port, NIPQUAD(src_addr), NIPQUAD(dst_addr));
 
     switch(protocol)
     {
@@ -58,7 +58,7 @@ static unsigned int hook_pre_route_func(void *priv, struct sk_buff *skb, const s
             break;
     }
 
-	return NF_ACCEPT;
+    return NF_ACCEPT;
 }
 
 static unsigned int hook_forward_func(void *priv, struct sk_buff *skb, const struct nf_hook_state *state)
@@ -132,13 +132,13 @@ static int __init packet_forward_module_init(void)
 
 static void __exit packet_forward_module_exit(void)
 {
-	printk(KERN_INFO "Module exit\n");
+    printk(KERN_INFO "Module exit\n");
 
     nf_unregister_hook(&nf_pre_route_hook_ops);
     nf_unregister_hook(&nf_forward_hook_ops);
     nf_unregister_hook(&nf_post_route_hook_ops);
 
-	return;
+    return;
 }
 
 module_init(packet_forward_module_init);
