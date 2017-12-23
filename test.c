@@ -33,7 +33,7 @@ static unsigned int hook_pre_route_func(void *priv, struct sk_buff *skb, const s
 
     int datalen;
     
-    printk(KERN_DEBUG "PRE_ROUTING : (%u,%u,%u,%u.%u.%u.%u,%u.%u.%u.%u)\n", protocol, src_port, dst_port, NIPQUAD(src_addr), NIPQUAD(dst_addr));
+    printk(KERN_DEBUG "PRE_ROUTING[(%u;%u;%u;%u.%u.%u.%u;%u.%u.%u.%u)]\n", protocol, src_port, dst_port, NIPQUAD(src_addr), NIPQUAD(dst_addr));
 
     switch(protocol)
     {
@@ -73,7 +73,8 @@ static unsigned int hook_forward_func(void *priv, struct sk_buff *skb, const str
     unsigned short src_port = ntohs(th->source);
     unsigned short dst_port = ntohs(th->dest);
 
-    printk(KERN_DEBUG "FORWARD : (%u,%u,%u,%u.%u.%u.%u,%u.%u.%u.%u)\n", protocol, src_port, dst_port, NIPQUAD(src_addr), NIPQUAD(dst_addr));
+    if(dst_addr == in_aton(DST_IP) && src_port == SRC_PORT && dst_port == DST_PORT)
+        printk(KERN_DEBUG "FORWARD[(%u;%u;%u;%u.%u.%u.%u;%u.%u.%u.%u)]\n", protocol, src_port, dst_port, NIPQUAD(src_addr), NIPQUAD(dst_addr));
          
     return NF_ACCEPT;
 }
@@ -90,7 +91,8 @@ static unsigned int hook_post_route_func(void *priv, struct sk_buff *skb, const 
     unsigned short src_port = ntohs(th->source);
     unsigned short dst_port = ntohs(th->dest);
        
-    printk(KERN_DEBUG "POST_ROUTING : (%u,%u,%u,%u.%u.%u.%u,%u.%u.%u.%u)\n", protocol, src_port, dst_port, NIPQUAD(src_addr), NIPQUAD(dst_addr));
+    if(dst_addr == in_aton(DST_IP) && src_port == SRC_PORT && dst_port == DST_PORT)
+        printk(KERN_DEBUG "POST_ROUTING[(%u;%u;%u;%u.%u.%u.%u;%u.%u.%u.%u)]\n", protocol, src_port, dst_port, NIPQUAD(src_addr), NIPQUAD(dst_addr));
 
     return NF_ACCEPT;
 }
